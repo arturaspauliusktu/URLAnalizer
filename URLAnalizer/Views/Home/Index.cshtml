@@ -1,11 +1,29 @@
-﻿@{
+﻿@model URLAnalizer.Models.Result
+@{
     ViewData["Title"] = "Home Page";
 }
 
 <h2> URL Analizer</h2>
 
-<input class="form-control" type="text" name="URL" placeholder="Enret your URL"> <br>
-<button class="btn btn-info" type="button">Submit</button> <br> <br>
+@using (Html.BeginForm("Index", "Home", FormMethod.Post))
+{
+    <input class="form-control" type="text" name="URL" placeholder="Enret your URL"> <br>
+    <button class="btn btn-info" type="submit">Submit</button> <br> <br>
+}
 
-<font color="red">This url is bad  &#10006</font> <br>
-<font color="green">This url is good  &#10004</font>
+
+@if (-1 == Model.Prediction)
+{
+    <font color="red">@Model.URL  &#10006</font> <br>
+    <h3>Was prediction accurate</h3>
+    <button class="btn btn-info" type="button" onclick="location.href='@Url.Action("AddToFile", "Home", new { URL = Model.URL, prediction = Model.Prediction})'">Yes</button>
+    <button class="btn btn-info" type="button" onclick="location.href='@Url.Action("AddToFile", "Home", new { URL = Model.URL, prediction = -Model.Prediction})'">No</button>
+}
+else if (1 == Model.Prediction)
+{
+    <font color="green">@Model.URL  &#10004</font> <br> <br>
+    <h3>Was prediction accurate</h3>
+    <button class="btn btn-info" type="button" onclick="location.href='@Url.Action("AddToFile", "Home", new { URL = Model.URL, prediction = Model.Prediction})'">Yes</button>
+    <button class="btn btn-info" type="button" onclick="location.href='@Url.Action("AddToFile", "Home", new { URL = Model.URL, prediction = -Model.Prediction})'">No</button>
+}
+

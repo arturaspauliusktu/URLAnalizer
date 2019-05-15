@@ -11,19 +11,12 @@ namespace URLAnalizer.Controllers
 {
     public class HomeController : Controller
     {
-        public List<URLData> DataFromFile = new List<URLData>();
-
 
         public IActionResult Index()
         {
-            if (DataFromFile.Count == 0)
-                ReadDataFromFile();
+            Result result = new Result();
 
-            foreach(URLData d in DataFromFile)
-                Console.WriteLine("Reultatas" + d.Result);
-
-
-            return View();
+            return View(result);
         }
 
         public IActionResult About()
@@ -54,7 +47,7 @@ namespace URLAnalizer.Controllers
 
        //--------------------------------------------------------MUSU KODAS----------------------------------------------------------------------------
 
-        public void ReadDataFromFile()
+        public void ReadDataFromFile(List<URLData> DataFromFile)
         {
             bool firstLine = true;
 
@@ -74,7 +67,36 @@ namespace URLAnalizer.Controllers
             }
         }
 
+        [HttpPost]
+        public ActionResult Index(string URL)
+        {
+            string u = URL;
+            int prediction = 1;
 
+            List<URLData> DataFromFile = new List<URLData>();
+
+            if (DataFromFile.Count == 0)
+                ReadDataFromFile(DataFromFile);
+
+            //URL = page url from text field
+            //Do prediction here
+
+            Result result = new Result(u, prediction);
+            return View(result);
+        }
+
+
+        public ActionResult AddToFile(string URL, int prediction)
+        {
+            //prob read file again
+
+            //check if it dosent exist already
+
+            //if not add to file
+
+            Result result = new Result(URL, prediction);
+            return View("Index", result);
+        }
 
     }
 }
