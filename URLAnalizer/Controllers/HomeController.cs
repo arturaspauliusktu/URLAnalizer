@@ -103,17 +103,31 @@ namespace URLAnalizer.Controllers
             }
             else
             {
-                List<int> indexes = PhishingIndexes(URL);
+                List<double> indexes = PhishingIndexes(URL);
 
-                //MAGIJA
+                int prd = SVMpredicate(indexes);
                 
-                return View(new Result(URL, 1/*rezultatas gautas is algoritmo*/));
+                return View(new Result(URL, prd));
             }
         }
 
-        public List<int> PhishingIndexes(string URL)
+        private int SVMpredicate( List<double> x)
         {
-            List<int> indexes = new List<int>();
+            List<double> w = new List<double> { 3.00711980577991, 1.93769457425321, 1.92729411813324, 0.880188320237666, 7.93449186648432, 5.46749683263913, -0.280493231161658, -1.70262591713867, 0.850931284532477, 6.46162051417157, -11.8214927946623 };
+            double dotProduct = x.Zip(w, (d1, d2) => d1 * d2).Sum();
+            if ( dotProduct > 0)
+            {
+                return 1;
+            }
+            else
+            {
+                return -1;
+            }
+        }
+
+        public List<double> PhishingIndexes(string URL)
+        {
+            List<double> indexes = new List<double>();
 
             string newURL = "";
             Uri uriURL;
@@ -242,7 +256,7 @@ namespace URLAnalizer.Controllers
             //List<int[]> DataFromFile = new List<int[]>();
             //ReadDataFromIntegers(DataFromFile);
 
-            List<int> indexes = PhishingIndexes(URL);
+            List<double> indexes = PhishingIndexes(URL);
 
             using (FileStream aFile = new FileStream("~/../Data/cleanedData.txt", FileMode.Append, FileAccess.Write))
             using (StreamWriter sw = new StreamWriter(aFile))
