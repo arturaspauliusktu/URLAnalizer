@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -47,12 +48,12 @@ namespace URLAnalizer.Controllers
 
        //--------------------------------------------------------MUSU KODAS----------------------------------------------------------------------------
 
-        public void ReadDataFromFile(List<URLData> DataFromFile)
+        public void ReadDataFromIntegers(List<int[]> DataFromFile)
         {
             bool firstLine = true;
 
 
-            string[] lines = System.IO.File.ReadAllLines("~/../Data/dataset.txt");
+            string[] lines = System.IO.File.ReadAllLines("~/../Data/cleanedData.txt");
             foreach(string line in lines)
             {
                 if (firstLine)
@@ -62,28 +63,52 @@ namespace URLAnalizer.Controllers
                 }
 
                 string[] s = line.Split('\t');
-                DataFromFile.Add(new URLData(int.Parse(s[1]), int.Parse(s[2]), int.Parse(s[3]), int.Parse(s[4]), int.Parse(s[5]), int.Parse(s[6]), int.Parse(s[7]), int.Parse(s[8]),
-                    int.Parse(s[9]), int.Parse(s[10]), int.Parse(s[11])));
+
+                DataFromFile.Add(new int[]{ int.Parse(s[1]), int.Parse(s[2]), int.Parse(s[3]), int.Parse(s[4]), int.Parse(s[5]), int.Parse(s[6]), int.Parse(s[7]), int.Parse(s[8]),
+                    int.Parse(s[9]), int.Parse(s[10]), int.Parse(s[11]) });
+            }
+        }
+
+        public void ReadDataFromURL(Dictionary<string, string> URLs)
+        {
+            bool firstLine = true;
+            string[] lines = System.IO.File.ReadAllLines("~/../Data/URLs.txt");
+            foreach (string line in lines)
+            {
+                if (firstLine)
+                {
+                    firstLine = false;
+                    continue;
+                }
+
+                string[] s = line.Split('\t');
+                if (!URLs.ContainsKey(s[0]))
+                    URLs.Add(s[0], s[1]);
+
             }
         }
 
         [HttpPost]
         public ActionResult Index(string URL)
         {
-            string u = URL;
-            int prediction = 1;
+            Dictionary<string, string> URLs = new Dictionary<string, string>();
+            ReadDataFromURL(URLs);
 
-            List<URLData> DataFromFile = new List<URLData>();
+            if (URLs.ContainsKey(URL))
+            {
+                if (URLs[URL] == "bad")
+                    return View(new Result(URL, -1));
+                else
+                    return View(new Result(URL, 1));
+            }
+            else
+            {
+                List<int> indexes = PhishingIndexes(URL);
 
-            if (DataFromFile.Count == 0)
-                ReadDataFromFile(DataFromFile);
-
-            List<int> indexes = PhishingIndexes(URL);
-            //URL = page url from text field
-            //Do prediction here
-
-            Result result = new Result(u, prediction);
-            return View(result);
+                //MAGIJA
+                
+                return View(new Result(URL, 1/*rezultatas gautas is algoritmo*/));
+            }
         }
 
         public List<int> PhishingIndexes(string URL)
@@ -191,11 +216,43 @@ namespace URLAnalizer.Controllers
 
         public ActionResult AddToFile(string URL, int prediction)
         {
-            //prob read file again
+            Dictionary<string, string> URLs = new Dictionary<string, string>();
+            ReadDataFromURL(URLs);
 
-            //check if it dosent exist already
+            if (!URLs.ContainsKey(URL))
+            {
+                if (prediction == -1)
+                {
+                    using (FileStream aFile = new FileStream("~/../Data/URLs.txt", FileMode.Append, FileAccess.Write))
+                    using (StreamWriter sw = new StreamWriter(aFile))
+                    {
+                        sw.WriteLine(URL + "\t" + "bad");
+                    }
+                }
+                else
+                {
+                    using (FileStream aFile = new FileStream("~/../Data/URLs.txt", FileMode.Append, FileAccess.Write))
+                    using (StreamWriter sw = new StreamWriter(aFile))
+                    {
+                        sw.WriteLine(URL + "\t" + "good");
+                    }
+                }
+            }
 
-            //if not add to file
+            //List<int[]> DataFromFile = new List<int[]>();
+            //ReadDataFromIntegers(DataFromFile);
+
+            List<int> indexes = PhishingIndexes(URL);
+
+            using (FileStream aFile = new FileStream("~/../Data/cleanedData.txt", FileMode.Append, FileAccess.Write))
+            using (StreamWriter sw = new StreamWriter(aFile))
+            {
+                sw.Write("9999999" + "\t");
+                for (int i = 0; i < indexes.Count - 1; i++)
+                    sw.Write(indexes[i] + "\t");
+
+                sw.WriteLine(prediction);
+            }
 
             Result result = new Result(URL, prediction);
             return View("Index", result);
