@@ -6704,3 +6704,5 @@ index	having_IPhaving_IP_Address	URLURL_Length	having_At_Symbol	double_slash_red
 9999999	1	-1	1	1	-1	1	1	1	1	1	-1
 9999999	1	-1	1	1	1	1	1	1	1	1	-1
 9999999	1	-1	1	1	-1	1	1	1	1	1	-1
+9999999	1	-1	1	1	1	1	1	1	1	1	-1
+9999999	-1	1	-1	-1	-1	-1	-1	-1	-1	-1	-1

@@ -115,7 +115,7 @@ namespace URLAnalizer.Controllers
         {
             List<double> w = new List<double> { 3.00711980577991, 1.93769457425321, 1.92729411813324, 0.880188320237666, 7.93449186648432, 5.46749683263913, -0.280493231161658, -1.70262591713867, 0.850931284532477, 6.46162051417157, -11.8214927946623 };
             double dotProduct = x.Zip(w, (d1, d2) => d1 * d2).Sum();
-            if ( dotProduct > 0)
+            if ( dotProduct < 0)
             {
                 return 1;
             }
@@ -154,33 +154,33 @@ namespace URLAnalizer.Controllers
             }
 
             if (digitCount == 4)                                                                // 1 Having_IPhaving_IP_Address
-                indexes.Add(-1);
-            else
                 indexes.Add(1);
+            else
+                indexes.Add(-1);
 
             if (newURL.Length >= 75)                                                            // 2 URL_Length 
-                indexes.Add(-1);
-            else
                 indexes.Add(1);
+            else
+                indexes.Add(-1);
 
             if (newURL.Contains('@'))                                                           // 3 Having_At_Symbol
-                indexes.Add(-1);
-            else
                 indexes.Add(1);
+            else
+                indexes.Add(-1);
 
             string path = uriURL.AbsolutePath;                                                  // 4 Double_slash_redirecting
             string str = "";
             if (path.Length >= 2)
                 str = path.Substring(0, 2);
             if (str == "//")
-                indexes.Add(-1);
-            else
                 indexes.Add(1);
+            else
+                indexes.Add(-1);
 
             if (uriURL.Authority.Contains('-'))                                                 // 5 Prefix_Suffix
-                indexes.Add(-1);
-            else
                 indexes.Add(1);
+            else
+                indexes.Add(-1);
 
             var host = new System.Uri(newURL).Host;
             int index = host.LastIndexOf('.'), last = 3;
@@ -197,30 +197,30 @@ namespace URLAnalizer.Controllers
                     dotCount++;
             }
             if (dotCount > 2)                                                                   // 6 Having_Sub_Domain 
-                indexes.Add(-1);
-            else
                 indexes.Add(1);
+            else
+                indexes.Add(-1);
 
             if (uriURL.Authority == "bit.ly")                                                   // 7 Shortining_Service (SITAS VIETOJ Domain_registeration_length)
-                indexes.Add(-1);
-            else
                 indexes.Add(1);
+            else
+                indexes.Add(-1);
 
             int[] goodPorts = { 21, 22, 23, 80, 443, 445, 1433, 1521, 3306, 3389 };             // legit ports
             if (goodPorts.Contains(uriURL.Port) == false)                                       // 8 Port
-                indexes.Add(-1);
-            else
                 indexes.Add(1);
+            else
+                indexes.Add(-1);
 
             if (newURL.Contains("mail()") || newURL.Contains("mailto:"))                        // 9 Submitting_to_email (VIETOJ SFH)
-                indexes.Add(-1);
-            else
                 indexes.Add(1);
+            else
+                indexes.Add(-1);
 
             if (uriURL.Authority.Contains("https"))                                             // 10 HTTPS_token (VIETOJ Links_in_tags)
-                indexes.Add(-1);
-            else
                 indexes.Add(1);
+            else
+                indexes.Add(-1);
 
 
             indexes.Add(-1);                                                                    // Arturas liepe sita pridet kazkam
