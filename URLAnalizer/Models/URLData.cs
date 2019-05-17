@@ -12,15 +12,15 @@ namespace URLAnalizer.Models
         public int Double_slash_redirecting { get; set; }
         public int Prefix_Suffix { get; set; }
         public int Having_Sub_Domain { get; set; }
-        public int Domain_registeration_length { get; set; }
+        public int Shortining_Service { get; set; }
         public int Port { get; set; }
-        public int Links_in_tags { get; set; }
-        public int SFH { get; set; }
+        public int Submitting_to_email { get; set; }
+        public int HTTPS_token { get; set; }
         public int Result { get; set; }
 
 
-        public URLData(int Having_IPhaving_IP_Address, int URL_Length, int Having_At_Symbol, int Double_slash_redirecting, int Prefix_Suffix, int Having_Sub_Domain,
-            int Domain_registeration_length, int Port, int Links_in_tags, int SFH, int Result)
+        public URLData(int Having_IPhaving_IP_Address, int URL_Length, int Having_At_Symbol, int Shortining_Service, int Prefix_Suffix, int Having_Sub_Domain,
+            int Domain_registeration_length, int Port, int Submitting_to_email, int HTTPS_token, int Result)
         {
             this.Having_IPhaving_IP_Address = Having_IPhaving_IP_Address;
             this.URL_Length = URL_Length;
@@ -28,10 +28,10 @@ namespace URLAnalizer.Models
             this.Double_slash_redirecting = Double_slash_redirecting;
             this.Prefix_Suffix = Prefix_Suffix;
             this.Having_Sub_Domain = Having_Sub_Domain;
-            this.Domain_registeration_length = Domain_registeration_length;
+            this.Shortining_Service = Shortining_Service;
             this.Port = Port;
-            this.Links_in_tags = Links_in_tags;
-            this.SFH = SFH;
+            this.Submitting_to_email = Submitting_to_email;
+            this.HTTPS_token = HTTPS_token;
             this.Result = Result;
         }
     }

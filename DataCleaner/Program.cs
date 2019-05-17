@@ -24,7 +24,7 @@ namespace DataCleaner
             bool firstLine = true;
 
 
-            string[] lines = System.IO.File.ReadAllLines("dataset.txt");
+            string[] lines = System.IO.File.ReadAllLines("../../dataset.txt");
             foreach (string line in lines)
             {
                 if (firstLine)
@@ -50,8 +50,8 @@ namespace DataCleaner
                     if (dataFromFile[j].Result != -10 && dataFromFile[i].Result != -10 && ( dataFromFile[i].Having_IPhaving_IP_Address == dataFromFile[j].Having_IPhaving_IP_Address
                         && dataFromFile[i].URL_Length == dataFromFile[j].URL_Length && dataFromFile[i].Having_At_Symbol == dataFromFile[j].Having_At_Symbol 
                         && dataFromFile[i].Double_slash_redirecting == dataFromFile[j].Double_slash_redirecting && dataFromFile[i].Prefix_Suffix == dataFromFile[j].Prefix_Suffix 
-                        && dataFromFile[i].Having_Sub_Domain == dataFromFile[j].Having_Sub_Domain && dataFromFile[i].Domain_registeration_length == dataFromFile[j].Domain_registeration_length 
-                        && dataFromFile[i].Port == dataFromFile[j].Port && dataFromFile[i].Links_in_tags == dataFromFile[j].Links_in_tags && dataFromFile[i].SFH == dataFromFile[j].SFH 
+                        && dataFromFile[i].Having_Sub_Domain == dataFromFile[j].Having_Sub_Domain && dataFromFile[i].Shortining_Service == dataFromFile[j].Shortining_Service
+                        && dataFromFile[i].Port == dataFromFile[j].Port && dataFromFile[i].HTTPS_token == dataFromFile[j].HTTPS_token && dataFromFile[i].Submitting_to_email == dataFromFile[j].Submitting_to_email
                         && dataFromFile[i].Result != dataFromFile[j].Result))
                     {
                         dataFromFile[j].Result = -10;
@@ -69,16 +69,16 @@ namespace DataCleaner
 
         static public void OutputToFile(List<URLData> cleanedData)
         {
-            string title = "index	having_IPhaving_IP_Address	URLURL_Length	having_At_Symbol	double_slash_redirecting	Prefix_Suffix	having_Sub_Domain	Domain_registeration_length	port	Links_in_tags	SFH	Result";
-            using (StreamWriter file = new StreamWriter("cleanedData.txt"))
+            string title = "index	having_IPhaving_IP_Address	URLURL_Length	having_At_Symbol	double_slash_redirecting	Prefix_Suffix	having_Sub_Domain	Shortining_Service	port	Submitting_to_email	HTTPS_token	Result";
+            using (StreamWriter file = new StreamWriter("../../../URLAnalizer/Data/cleanedData.txt"))
             {
                 file.WriteLine(title);
                 for (int i = 0; i < cleanedData.Count; i++)
                 {
                     int a = i + 1; 
                     file.WriteLine(a + "\t" + cleanedData[i].Having_IPhaving_IP_Address + "\t" + cleanedData[i].URL_Length + "\t" + cleanedData[i].Having_At_Symbol + "\t" 
-                        + cleanedData[i].Double_slash_redirecting + "\t" + cleanedData[i].Prefix_Suffix + "\t" + cleanedData[i].Having_Sub_Domain + "\t" + cleanedData[i].Domain_registeration_length 
-                        + "\t" + cleanedData[i].Port + "\t" + cleanedData[i].Links_in_tags + "\t" + cleanedData[i].SFH + "\t" + cleanedData[i].Result);
+                        + cleanedData[i].Double_slash_redirecting + "\t" + cleanedData[i].Prefix_Suffix + "\t" + cleanedData[i].Having_Sub_Domain + "\t" + cleanedData[i].Shortining_Service
+                        + "\t" + cleanedData[i].Port + "\t" + cleanedData[i].HTTPS_token + "\t" + cleanedData[i].Submitting_to_email + "\t" + cleanedData[i].Result);
                 }
             }
         }
@@ -96,26 +96,27 @@ namespace DataCleaner
         public int Double_slash_redirecting { get; set; }
         public int Prefix_Suffix { get; set; }
         public int Having_Sub_Domain { get; set; }
-        public int Domain_registeration_length { get; set; }
+        public int Shortining_Service { get; set; }
         public int Port { get; set; }
-        public int Links_in_tags { get; set; }
-        public int SFH { get; set; }
+        public int HTTPS_token { get; set; }
+        public int Submitting_to_email { get; set; }
         public int Result { get; set; }
 
 
         public URLData(int Having_IPhaving_IP_Address, int URL_Length, int Having_At_Symbol, int Double_slash_redirecting, int Prefix_Suffix, int Having_Sub_Domain,
-            int Domain_registeration_length, int Port, int Links_in_tags, int SFH, int Result)
+            int Shortining_Service, int Port, int Submitting_to_email, int HTTPS_token, int Result)
         {
             this.Having_IPhaving_IP_Address = Having_IPhaving_IP_Address;
             this.URL_Length = URL_Length;
             this.Having_At_Symbol = Having_At_Symbol;
             this.Double_slash_redirecting = Double_slash_redirecting;
+
             this.Prefix_Suffix = Prefix_Suffix;
             this.Having_Sub_Domain = Having_Sub_Domain;
-            this.Domain_registeration_length = Domain_registeration_length;
+            this.Shortining_Service = Shortining_Service;
             this.Port = Port;
-            this.Links_in_tags = Links_in_tags;
-            this.SFH = SFH;
+            this.Submitting_to_email = Submitting_to_email;
+            this.HTTPS_token = HTTPS_token;
             this.Result = Result;
         }
     }
