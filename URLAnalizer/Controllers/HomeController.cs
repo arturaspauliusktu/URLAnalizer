@@ -131,7 +131,7 @@ namespace URLAnalizer.Controllers
 
             string newURL = "";
             Uri uriURL;
-            if (Uri.IsWellFormedUriString(URL, UriKind.Absolute) == false)                      // adds https:// if necessary
+            if (Uri.IsWellFormedUriString(URL, UriKind.Absolute) == false)                      // Prideda https:// jei jo nėra
             {
                 newURL = "https://" + URL;
                 uriURL = new Uri(newURL);
@@ -142,33 +142,33 @@ namespace URLAnalizer.Controllers
                 uriURL = new Uri(URL);
             }
 
-            string[] parts = uriURL.Authority.Split('.');                                       // splits domain into parts to check if its an IP
+            string[] parts = uriURL.Authority.Split('.');                                       // Domena sudalina dalimis
             int digitCount = 0;
             if (parts.Length >= 4)
             {
                 for (int i = 0; i < 4; i++)
                 {
-                    if (System.Text.RegularExpressions.Regex.IsMatch(parts[i], @"^\d+$"))       // if is a digit
+                    if (System.Text.RegularExpressions.Regex.IsMatch(parts[i], @"^\d+$"))       // Tikrina ar domeno dalis yra skaičius
                         digitCount++;
                 }
             }
 
-            if (digitCount == 4)                                                                // 1 Having_IPhaving_IP_Address
+            if (digitCount == 4)                                                                // Ar naudojamas IP adresas
                 indexes.Add(1);
             else
                 indexes.Add(-1);
 
-            if (newURL.Length >= 75)                                                            // 2 URL_Length 
+            if (newURL.Length >= 75)                                                            // Ar adresas ilgesnis nei 75 simboliai
                 indexes.Add(1);
             else
                 indexes.Add(-1);
 
-            if (newURL.Contains('@'))                                                           // 3 Having_At_Symbol
+            if (newURL.Contains('@'))                                                           // Ar adresas turi @ simbolį
                 indexes.Add(1);
             else
                 indexes.Add(-1);
 
-            string path = uriURL.AbsolutePath;                                                  // 4 Double_slash_redirecting
+            string path = uriURL.AbsolutePath;                                                  // Ar naudojamas peradresavimas su //
             string str = "";
             if (path.Length >= 2)
                 str = path.Substring(0, 2);
@@ -177,14 +177,14 @@ namespace URLAnalizer.Controllers
             else
                 indexes.Add(-1);
 
-            if (uriURL.Authority.Contains('-'))                                                 // 5 Prefix_Suffix
+            if (uriURL.Authority.Contains('-'))                                                 // Ar domene naudojamas –
                 indexes.Add(1);
             else
                 indexes.Add(-1);
 
             var host = new System.Uri(newURL).Host;
             int index = host.LastIndexOf('.'), last = 3;
-            while (index > 0 && index >= last - 3)                                              // gets subdomain 
+            while (index > 0 && index >= last - 3)                                              // Randa subdomena
             {
                 last = index;
                 index = host.LastIndexOf('.', last - 1);
@@ -196,34 +196,33 @@ namespace URLAnalizer.Controllers
                 if (domain[i] == '.')
                     dotCount++;
             }
-            if (dotCount > 2)                                                                   // 6 Having_Sub_Domain 
+            if (dotCount > 2)                                                                   // Ar taškų skaičius subdomene yra didesnis nei 2
                 indexes.Add(1);
             else
                 indexes.Add(-1);
 
-            if (uriURL.Authority == "bit.ly")                                                   // 7 Shortining_Service (SITAS VIETOJ Domain_registeration_length)
+            if (uriURL.Authority == "bit.ly")                                                   // Ar adresas yra sutrumpintas naudojant „TinyURL“
                 indexes.Add(1);
             else
                 indexes.Add(-1);
 
-            int[] goodPorts = { 21, 22, 23, 80, 443, 445, 1433, 1521, 3306, 3389 };             // legit ports
-            if (goodPorts.Contains(uriURL.Port) == false)                                       // 8 Port
+            int[] goodPorts = { 21, 22, 23, 80, 443, 445, 1433, 1521, 3306, 3389 };             // Standartiški portai
+            if (goodPorts.Contains(uriURL.Port) == false)                                       // Ar naudojamas nestandartiškas portas
                 indexes.Add(1);
             else
                 indexes.Add(-1);
 
-            if (newURL.Contains("mail()") || newURL.Contains("mailto:"))                        // 9 Submitting_to_email (VIETOJ SFH)
+            if (newURL.Contains("mail()") || newURL.Contains("mailto:"))                        // Ar naudojamas duomenų persiuntimas į paštą (ar yra „mail()“ arba „mailto:“)
                 indexes.Add(1);
             else
                 indexes.Add(-1);
 
-            if (uriURL.Authority.Contains("https"))                                             // 10 HTTPS_token (VIETOJ Links_in_tags)
+            if (uriURL.Authority.Contains("https"))                                             // Ar domene yra „https“
                 indexes.Add(1);
             else
                 indexes.Add(-1);
 
-
-            indexes.Add(-1);                                                                    // Arturas liepe sita pridet kazkam
+            indexes.Add(-1);                                                                    
 
             return indexes;
         }

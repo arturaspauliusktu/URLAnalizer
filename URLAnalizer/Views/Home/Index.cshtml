@@ -7,7 +7,7 @@
 
 @using (Html.BeginForm("Index", "Home", FormMethod.Post))
 {
-    <input class="form-control" type="text" name="URL" placeholder="Enret your URL"> <br>
+    <input class="form-control" type="text" name="URL" placeholder="Enter your URL"> <br>
     <button class="btn btn-info" type="submit">Submit</button> <br> <br>
 }
 
@@ -15,14 +15,14 @@
 @if (-1 == Model.Prediction)
 {
     <font color="red">@Model.URL  &#10006</font> <br>
-    <h3>Was prediction accurate</h3>
+    <h3>Was this prediction accurate?</h3>
     <button class="btn btn-info" type="button" onclick="location.href='@Url.Action("AddToFile", "Home", new { URL = Model.URL, prediction = Model.Prediction})'">Yes</button>
     <button class="btn btn-info" type="button" onclick="location.href='@Url.Action("AddToFile", "Home", new { URL = Model.URL, prediction = -Model.Prediction})'">No</button>
 }
 else if (1 == Model.Prediction)
 {
     <font color="green">@Model.URL  &#10004</font> <br> <br>
-    <h3>Was prediction accurate</h3>
+    <h3>Was this prediction accurate?</h3>
     <button class="btn btn-info" type="button" onclick="location.href='@Url.Action("AddToFile", "Home", new { URL = Model.URL, prediction = Model.Prediction})'">Yes</button>
     <button class="btn btn-info" type="button" onclick="location.href='@Url.Action("AddToFile", "Home", new { URL = Model.URL, prediction = -Model.Prediction})'">No</button>
 }
